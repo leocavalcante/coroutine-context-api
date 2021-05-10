@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  dev:
+    container_name: coroutine_context_api
+    tty: true
+    build: .
+    volumes:
+      - ./:/var/www

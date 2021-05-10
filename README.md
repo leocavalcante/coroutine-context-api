@@ -1,2 +1,3 @@
-# coroutine-context-api
-Using Coroutines Contexts as Hierarchal Service Locators and Dependency Injection Containers
+# Coroutine Context API
+
+Using Coroutines Contexts as Hierarchic Service Locators and Dependency Injection Containers.

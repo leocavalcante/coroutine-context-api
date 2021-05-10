@@ -1,0 +1,41 @@
+{
+    "name": "leocavalcante/coroutine-context-api",
+    "description": "Using Coroutines Contexts as Hierarchic Service Locators and Dependency Injection Containers.",
+    "type": "library",
+    "require-dev": {
+        "swoole/ide-helper": "^4.6",
+        "pestphp/pest": "^1.1",
+        "vimeo/psalm": "^4.7"
+    },
+    "scripts": {
+        "test": [
+            "psalm",
+            "pest"
+        ]
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "leocavalcante",
+            "email": "lc@leocavalcante.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.4 || >=8.0",
+        "ext-swoole": "^4.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Swoole\\Coroutine\\Context\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Swoole\\Coroutine\\Context\\Test\\": "tests/"
+        }
+    }
+}
