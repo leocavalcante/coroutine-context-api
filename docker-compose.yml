@@ -6,3 +6,5 @@ services:
     build: .
     volumes:
       - ./:/var/www
+    environment:
+      - PHP_IDE_CONFIG=serverName=CoroutineContextAPI
