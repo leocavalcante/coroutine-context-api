@@ -13,7 +13,7 @@ use Swoole\Coroutine;
  * @return T
  * @throws ContextException
  */
-function provides(string $key, $value)
+function provide(string $key, $value)
 {
     if (Coroutine::getCid() === -1) {
         throw ContextException::notInCoroutine();
@@ -34,7 +34,7 @@ function provides(string $key, $value)
  * @return T
  * @throws ContextException
  */
-function uses(string $key, $default = null, int $cid = 0)
+function consume(string $key, $default = null, int $cid = 0)
 {
     if (Coroutine::getCid() === -1) {
         throw ContextException::notInCoroutine();
@@ -59,7 +59,7 @@ function uses(string $key, $default = null, int $cid = 0)
     }
 
     if ($parent_cid > 1) {
-        return uses($key, $default, $parent_cid);
+        return consume($key, $default, $parent_cid);
     }
 
     if ($default !== null) {
