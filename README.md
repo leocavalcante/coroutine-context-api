@@ -2,6 +2,8 @@
 
 Using Coroutines Contexts as Hierarchic Service Locators and Dependency Injection Containers.
 
+> Inspired by https://reactjs.org/docs/context.html
+
 ## Install
 ```shell
 composer require leocavalcante/coroutine-context-api
