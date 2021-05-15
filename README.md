@@ -12,7 +12,13 @@ composer require leocavalcante/coroutine-context-api
 ## Usage
 
 ### Provide
-#### `\Swoole\Coroutine\Context\provide(string $key, mixed $value): void`
+
+```php
+\Swoole\Coroutine\Context\provide(string $key, mixed $value): void
+```
+
+Sets a value to be consumed from children Coroutines based on a string.
+
 ```php
 use function Swoole\Coroutine\{run, Context\provide};
 
@@ -22,7 +28,13 @@ run(static function(): void {
 ```
 
 ### Consume
-#### `\Swoole\Coroutine\Context\consume(string $key, [mixed $default]): mixed`
+
+```php
+\Swoole\Coroutine\Context\consume(string $key, [mixed $default]): mixed
+```
+
+Consumes the value from the given key.
+
 ```php
 use function Swoole\Coroutine\{run, Context\provide, Context\consume};
 
@@ -32,7 +44,9 @@ run(static function(): void {
 });
 ```
 
-## Why is this different from passing parameters to function arguments?
+### But, but...
+
+#### Why is this different from passing parameters to function arguments?
 
 The `consume` function can lookup through the nearest provided key in the Coroutine tree.
 
@@ -51,7 +65,7 @@ run(static function(): void {
 });
 ```
 
-## Why is this different from globals?
+#### Why is this different from globals?
 
 It is not about global space being polluted, it is based on parent-child "Coroutine tree".
 
