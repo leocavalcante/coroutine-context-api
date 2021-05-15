@@ -10,7 +10,7 @@
     "scripts": {
         "test": [
             "psalm",
-            "pest"
+            "pest --coverage"
         ]
     },
     "license": "MIT",
