@@ -3,20 +3,17 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Swoole\Coroutine;
-use function Swoole\Coroutine\Context\{provides, uses};
+use function Swoole\Coroutine\Context\{provide, consume};
 
-Coroutine\run(static function(): void {
-    provides('message', 'Hello,');
+$print_message = static fn() => print(consume('message') . PHP_EOL);
 
-    Coroutine::create(static function(): void {
-        print(uses('message') . PHP_EOL);
+Coroutine\run(static function() use ($print_message): void {
+    provide('message', 'Hello,');
 
-        Coroutine::create(static fn() => print(uses('message') . PHP_EOL));
-
-        provides('message', 'World!');
-
-        Coroutine::create(static fn() => print(uses('message') . PHP_EOL));
+    go(static function () use ($print_message): void {
+        $print_message();
+        go($print_message);
+        provide('message', 'World!');
+        go($print_message);
     });
 });
-
-echo Coroutine::getCid();
