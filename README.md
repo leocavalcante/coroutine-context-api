@@ -1,4 +1,4 @@
-# Coroutine Context API
+# Coroutine Context API [![CI](https://github.com/leocavalcante/coroutine-context-api/actions/workflows/main.yml/badge.svg)](https://github.com/leocavalcante/coroutine-context-api/actions/workflows/main.yml)
 
 Using Coroutines Contexts as Hierarchic Service Locators and Dependency Injection Containers.
 
