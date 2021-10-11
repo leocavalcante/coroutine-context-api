@@ -2,7 +2,15 @@
 
 namespace Swoole\Coroutine\Context;
 
+use RuntimeException;
 use Swoole\Coroutine;
+use Swoole\Error;
+
+/**
+ * Used to know if the current context is not inside a coroutine
+ * or if there is no parent Coroutine
+ */
+const INVALID_CID = -1;
 
 /**
  * Provides a value based on a key for the child Coroutines.
@@ -11,12 +19,11 @@ use Swoole\Coroutine;
  * @param string $key
  * @param T $value
  * @return T
- * @throws ContextException
  */
 function provide(string $key, $value)
 {
-    if (Coroutine::getCid() === -1) {
-        throw ContextException::notInCoroutine();
+    if (Coroutine::getCid() === INVALID_CID) {
+        throw new Error('API must be called in the coroutine');
     }
 
     /** @var Coroutine\Context $context */
@@ -32,39 +39,31 @@ function provide(string $key, $value)
  * @param T|null $default
  * @param int $cid
  * @return T
- * @throws ContextException
  */
 function consume(string $key, $default = null, int $cid = 0)
 {
-    if (Coroutine::getCid() === -1) {
-        throw ContextException::notInCoroutine();
-    }
-
     /** @var int $cid */
     $cid = $cid === 0 ? Coroutine::getCid() : $cid;
+    if ($cid === INVALID_CID) {
+        throw new Error('API must be called in the coroutine');
+    }
+
+    /** @var Coroutine\Context|null $context */
+    $context = Coroutine::getContext($cid);
+    if ($context !== null && $context->offsetExists($key)) {
+        /** @var T */
+        return $context[$key];
+    }
+
     /** @var int|false $parent_cid */
     $parent_cid = Coroutine::getPcid($cid);
-
-    if ($parent_cid === false) {
-        throw ContextException::parentNotFound();
+    if ($parent_cid === false || $parent_cid === INVALID_CID) {
+        if ($default !== null) {
+            return $default;
+        }
+        
+        throw new RuntimeException(sprintf('A value for (%s) was not found in the coroutine context tree', $key));
     }
 
-    /** @var array $parent_context */
-    $parent_context = Coroutine::getContext($parent_cid);
-    /** @var T|null $value */
-    $value = $parent_context[$key] ?? null;
-
-    if ($value !== null) {
-        return $value;
-    }
-
-    if ($parent_cid > 1) {
-        return consume($key, $default, $parent_cid);
-    }
-
-    if ($default !== null) {
-        return $default;
-    }
-
-    throw ContextException::notFound($key);
+    return consume($key, $default, $parent_cid);
 }
